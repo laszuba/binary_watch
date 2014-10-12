@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-jul-16 BZR unknown)-product   date = Sun 12 Oct 2014 12:43:45 PM PDT
+Cmp-Mod V01 Created by Cvpcb (2014-jul-16 BZR unknown)-product   date = Sun 12 Oct 2014 02:42:46 PM PDT
 
 BeginCmp
 TimeStamp = /53FE06D2;
@@ -46,14 +46,14 @@ BeginCmp
 TimeStamp = /53FE176E;
 Reference = C6;
 ValeurCmp = 9pF;
-IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+IdModule  = Capacitors_SMD:C_0402;
 EndCmp
 
 BeginCmp
 TimeStamp = /53FE1774;
 Reference = C7;
 ValeurCmp = 9pF;
-IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+IdModule  = Capacitors_SMD:C_0402;
 EndCmp
 
 BeginCmp
@@ -239,27 +239,6 @@ IdModule  = Pin_Headers:Pin_Header_Straight_1x02;
 EndCmp
 
 BeginCmp
-TimeStamp = /54310507;
-Reference = P4;
-ValeurCmp = TST;
-IdModule  = Measurement_Points:Measurement_Point_Round-TH_Big;
-EndCmp
-
-BeginCmp
-TimeStamp = /5430FB80;
-Reference = P5;
-ValeurCmp = TST;
-IdModule  = Measurement_Points:Measurement_Point_Round-SMD-Pad_Small;
-EndCmp
-
-BeginCmp
-TimeStamp = /5430F9EE;
-Reference = P6;
-ValeurCmp = TST;
-IdModule  = Measurement_Points:Measurement_Point_Round-SMD-Pad_Small;
-EndCmp
-
-BeginCmp
 TimeStamp = /5430E20A;
 Reference = P7;
 ValeurCmp = MCU_ISENSE;
@@ -276,27 +255,6 @@ EndCmp
 BeginCmp
 TimeStamp = /5430FDFB;
 Reference = P9;
-ValeurCmp = TST;
-IdModule  = Measurement_Points:Measurement_Point_Round-TH_Big;
-EndCmp
-
-BeginCmp
-TimeStamp = /5430FDF5;
-Reference = P10;
-ValeurCmp = TST;
-IdModule  = Measurement_Points:Measurement_Point_Round-TH_Big;
-EndCmp
-
-BeginCmp
-TimeStamp = /5431862F;
-Reference = P11;
-ValeurCmp = TST;
-IdModule  = Measurement_Points:Measurement_Point_Round-TH_Big;
-EndCmp
-
-BeginCmp
-TimeStamp = /54318734;
-Reference = P12;
 ValeurCmp = TST;
 IdModule  = Measurement_Points:Measurement_Point_Round-TH_Big;
 EndCmp
