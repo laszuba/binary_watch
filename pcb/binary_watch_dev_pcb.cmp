@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-jul-16 BZR unknown)-product   date = Sun 12 Oct 2014 02:42:46 PM PDT
+Cmp-Mod V01 Created by Cvpcb (2014-jul-16 BZR unknown)-product   date = Sun 12 Oct 2014 04:05:04 PM PDT
 
 BeginCmp
 TimeStamp = /53FE06D2;
@@ -215,6 +215,34 @@ TimeStamp = /5430FE19;
 Reference = M4;
 ValeurCmp = MNT;
 IdModule  = _ Custom Lib:MNT_3.5MM;
+EndCmp
+
+BeginCmp
+TimeStamp = /543B4750;
+Reference = NET1;
+ValeurCmp = NET_CONN;
+IdModule  = _ Custom Lib:NET_CONN;
+EndCmp
+
+BeginCmp
+TimeStamp = /543B5161;
+Reference = NET2;
+ValeurCmp = NET_CONN;
+IdModule  = _ Custom Lib:NET_CONN;
+EndCmp
+
+BeginCmp
+TimeStamp = /543B6469;
+Reference = NET3;
+ValeurCmp = NET_CONN;
+IdModule  = _ Custom Lib:NET_CONN;
+EndCmp
+
+BeginCmp
+TimeStamp = /543B64B7;
+Reference = NET4;
+ValeurCmp = NET_CONN;
+IdModule  = _ Custom Lib:NET_CONN;
 EndCmp
 
 BeginCmp
