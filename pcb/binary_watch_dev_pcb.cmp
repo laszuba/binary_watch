@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2014-jul-16 BZR unknown)-product   date = Sun 12 Oct 2014 04:05:04 PM PDT
+Cmp-Mod V01 Created by Cvpcb (2014-jul-16 BZR unknown)-product   date = Thu 06 Nov 2014 09:13:57 PM PST
 
 BeginCmp
 TimeStamp = /53FE06D2;
@@ -431,7 +431,7 @@ BeginCmp
 TimeStamp = /543A4A14;
 Reference = SW1A1;
 ValeurCmp = BUTTON_1;
-IdModule  = ;
+IdModule  = _ Custom Lib:EVQ-P7C01P;
 EndCmp
 
 BeginCmp
@@ -445,7 +445,7 @@ BeginCmp
 TimeStamp = /53FE0B73;
 Reference = SW2A1;
 ValeurCmp = BUTTON_2;
-IdModule  = ;
+IdModule  = _ Custom Lib:EVQ-P7C01P;
 EndCmp
 
 BeginCmp
@@ -480,7 +480,7 @@ BeginCmp
 TimeStamp = /5430EF90;
 Reference = U3;
 ValeurCmp = NCP1117ST33T3G;
-IdModule  = SMD_Packages:SOT-223;
+IdModule  = _ Custom Lib:SOT-223;
 EndCmp
 
 BeginCmp
