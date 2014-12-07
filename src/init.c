@@ -42,6 +42,17 @@ void gpio_init(void);
 
 void init() {
 
+	// Disable the analog comparator to save some power
+	ACSR |= (1 << ACD);
+
+	// Disable the ADC
+
+	// Shut off unused peripherals
+	// ADC must be disabled before turning off clock
+	PRR |= (1 << PRTWI) | (0 << PRTIM2) | (0 << PRTIM0) |
+	       (1 << PRTIM1) | (1 << PRSPI) | (1 << PRUSART0) |
+	       (0 << PRADC);
+
 	timer_init();
 	gpio_init();
 
@@ -69,7 +80,8 @@ void timer_init() {
 	TIMSK2 |= (0 << OCIE2B) | (0 << OCIE2A) | (1 << TOIE2);
 
 	// Enable the external crystal input to use timer 2 as an RTC
-	ASSR |= (1 << AS2)
+	ASSR |= (1 << AS2);
+
 	return;
 }
 
@@ -77,6 +89,7 @@ void timer_init() {
 void gpio_init() {
 	// Set all unused pins to inputs with pull-ups
 
+	// Set LED pins to output
 	DDRB |= (1 << PB2) | (1 << PB1) | (1 << PB0);
 	DDRC |= (1 << PC2) | (1 << PC1);
 	DDRD |= (1 << PD7) | (1 << PD6) | (1 << PD5) | (1 << PD3) | (1 << PD2) | (1 << PD0);
@@ -85,6 +98,12 @@ void gpio_init() {
 	PORTB |= (1 << PB2) | (1 << PB1) | (1 << PB0);
 	PORTC |= (1 << PC2) | (1 << PC1);
 	PORTD |= (1 << PD7) | (1 << PD6) | (1 << PD5) | (1 << PD3) | (1 << PD2) | (1 << PD0);
+
+	// Enable pin change interrupts on two ports buttons are on
+	PCICR |= (1 << PCIE2) | (1 << PCIE1) | (0 << PCIE0);
+	// And configure the masks
+	PCMSK2 |= (1 << PCINT20);
+	PCMSK1 |= (1 << PCINT8);
 
 	return;
 }

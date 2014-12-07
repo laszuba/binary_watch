@@ -35,7 +35,6 @@
 //
 // All are active low
 
-//TODO invert bits to match LEDs
 void disp_time(uint8_t show) {
 	uint8_t hours_leds = 0;
 	uint8_t mins_leds = 0;
@@ -43,23 +42,18 @@ void disp_time(uint8_t show) {
 	if (show == ENABLE) {
 		hours_leds = my_time.hours;
 		mins_leds = my_time.mins;
-
-		PORTB &= ~((1 << PB2) | (1 << PB1) | (1 << PB0));
-		PORTC &= ~((1 << PC2) | (1 << PC1));
-		PORTD &= ~((1 << PD7) | (1 << PD6) | (1 << PD5) | (1 << PD3) | (1 << PD2) | (1 << PD0));
-
 	}
-	else {
-		PORTB |= ((1 << PB2) | (1 << PB1) | (1 << PB0));
-		PORTC |= ((1 << PC2) | (1 << PC1));
-		PORTD |= ((1 << PD7) | (1 << PD6) | (1 << PD5) | (1 << PD3) | (1 << PD2) | (1 << PD0));
-	}
+
+	// Make sure all the LEDs are off
+	PORTB |= (1 << PB2) | (1 << PB1) | (1 << PB0);
+	PORTC |= (1 << PC2) | (1 << PC1);
+	PORTD |= (1 << PD7) | (1 << PD6) | (1 << PD5) | (1 << PD3) | (1 << PD2) | (1 << PD0);
 
 	// Map time in structure to binary time on LEDs
-	//PORTB |= ((0b00111000 & mins_leds ) >> 4);
-	//PORTC |= ((0b00000110 & hours_leds) << 1);
-	//PORTD |= ((0b00000000 & hours_leds) >> 0)
-	//       | ((0b00000000 & hours_leds) >> 0)
-	//       | ((0b00000000 & mins_leds ) >> 0);
+	PORTC &=  ~((0b00000011 & hours_leds) << 1);
+	PORTD &= ~(((0b00000100 & hours_leds) >> 2)
+	         | ((0b00011000 & hours_leds) >> 1)
+	         | ((0b00000111 & mins_leds ) << 5));
+	PORTB &=  ~((0b00111000 & mins_leds ) >> 3);
 
 }

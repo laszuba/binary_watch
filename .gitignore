@@ -3,6 +3,9 @@
 *.o
 *.elf
 *.hex
+
 *bak
 *orcad*
 *.xml
+
+$*

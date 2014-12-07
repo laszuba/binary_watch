@@ -29,7 +29,7 @@ AVRDUDE = avrdude $(PROGRAMMER) -p $(PRG_DEVICE)
 COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
 
 # symbolic targets:
-all:	main.hex
+all:	clean main.hex
 
 .c.o:
 	$(COMPILE) -c $< -o $@
