@@ -15,16 +15,21 @@
 #include <avr/power.h>
 #include <avr/sleep.h>
 #include <avr/io.h>
+#include <util/delay.h>
 
 #include "init.h"
 #include "disp_time.h"
+#include "macros.h"
 
 // The number of timer compare events per second
-#define _TICKS_SEC 100
+#define _TICKS_SEC 128
 #define _LED_TIMEOUT_TICKS 1000
 #define _BUTTON_MODE_TICKS 600
 #define _DEBOUNCE_TICKS 50
 #define _BLINK_PERIOD 50
+
+#define MODE !(PINC & (1 << PC0))
+#define SET !(PIND & (1 << PD4))
 
 typedef enum {
 	IDLE,
@@ -48,45 +53,51 @@ void sleep_proc(void);
  * Public Functions
  **************************************************/
 
-int main(void)
-{
+int main(void) {
 
 	init();
 
+	my_time.secs = 0xFF;
+	my_time.mins = 0xFF;
+	my_time.hours = 0xFF;
+	disp_time(ENABLE);
+
 	// delay for one second at boot to allow the RTC to stabilize
+	_delay_ms(1000);
 
-	while(true) {
+	// Set an interesting time for testing
+	my_time.secs = 0;
+	my_time.mins = 13;
+	my_time.hours = 7;
+
+	// Globally enable interrupts
+	sei();
+
+	while (TRUE) {
 		// Spend most of the time in sleep
-		// Wake on timer tick
+		// Wake on RTC timer tick
 
-		select(current_state) {
+		switch (current_state) {
 			// LEDs off, waiting for button presses
 			case IDLE:
+				sei();
+				next_state = IDLE;
 				// Check for buttons
-				if(/* either button pressed */) {
+				if (SET || MODE) {
 					next_state = WAKE;
-					timeout_ticks = my_time.elapsed_ticks;
-					disp_time(&my_time);
 				}
 				break;
 
 			// LEDs on, waiting for timeout
 			case WAKE:
+				next_state = WAKE;
+				cli();
+				disp_time(DISABLE);
 				// if button is still down after timeout, enter set mode
-				if(0 /* button still down AND mode timeout elapsed */) {
-					next_state = SET_HOURS;
-				}
-				else if (((my_time.elapsed_ticks - timeout_ticks) >
-					_LED_TIMEOUT_TICKS)
-					/* && button not down */) {
+				if (!SET && !MODE) {
 					next_state = IDLE;
-					disp_time(NULL);
-				}
-				else {
-					next_state = WAKE;
 				}
 				break;
-
 			// Time set mode, pressing set will increment hours up to 24, then
 			// roll over, pressing mode will switch to minute set mode
 			case SET_HOURS:
@@ -107,10 +118,10 @@ int main(void)
 		current_state = next_state;
 
 		// Put controller to sleep until next tick
-		sleep_proc();
+		//sleep_proc();
 	}
 
-	return 1;
+	return 0;
 }
 
 /**************************************************
@@ -133,25 +144,33 @@ void sleep_proc() {
  * ISR
  **************************************************/
 
-ISR(TIMER1_COMPA_vect) 
-{
-	++my_time.elapsed_ticks;
+// On compare set the LEDs off
+ISR(TIMER0_COMPA_vect) {
+	disp_time(DISABLE);
+}
 
-	// On a timer compare, update all the time values
-	// a 'tick' happens every timer compare
-	if(my_time.ticks == _TICKS_SEC) {
+// On overflow, turn the LEDs back on
+ISR(TIMER0_OVF_vect) {
+	disp_time(ENABLE);
+}
+
+ISR(TIMER2_OVF_vect) 
+{
+	// On a timer overflow, update all the time values
+	// a 'tick' happens every timer compare or 128x a second
+	if (my_time.ticks == _TICKS_SEC) {
 		my_time.ticks = 0;
 		++my_time.secs;
 
-		if(my_time.secs == 60) {
+		if (my_time.secs == 60) {
 			my_time.secs = 0;
 			++my_time.mins;
 
-			if(my_time.mins == 60) {
+			if (my_time.mins == 60) {
 				my_time.mins = 0;
 				++my_time.hours;
 
-				if(my_time.hours == 24) {
+				if (my_time.hours == 24) {
 					my_time.hours = 0;
 				}
 			}
@@ -159,4 +178,3 @@ ISR(TIMER1_COMPA_vect)
 	}
 
 }
-
