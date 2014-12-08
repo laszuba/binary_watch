@@ -1,32 +1,31 @@
-#ifndef _INIT_H
-#define _INIT_H
+#ifndef _DEBOUNCER_H
+#define _DEBOUNCER_H
 
 /**************************************************
  * Macros
  **************************************************/
 
-// LED PWM setting. 0-255 controls brightness of LEDs
-// 0   -- minimum brightness
-// 255 -- full brightness
-#define _LED_BRIGHTNESS 25
+#define _DEBOUNCE_TICKS 50
 
 /**************************************************
- * Enums/Structs
+ * Enums/Struts
  **************************************************/
 
-typedef struct {
-	uint8_t ticks;
-	uint8_t secs;
-	uint8_t mins;
-	uint8_t hours;
-} time_t;
+typedef enum {
+	TST,
+	INC,
+	RST
+} debouncer_action_t;
 
-extern time_t my_time;
+typedef enum {
+	RUNNING,
+	DEBOUNCED
+} debounced_t;
 
 /**************************************************
  * Public Functions
  **************************************************/
 
-void init(void);
+debounced_t debouncer(debouncer_action_t);
 
-#endif /* _INIT_H */
+#endif /* _DEBOUNCER_H */

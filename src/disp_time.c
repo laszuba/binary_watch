@@ -12,6 +12,8 @@
  ******************************************************************************/
 
 #include <avr/io.h>
+
+#include "disp_time.h"
 #include "init.h"
 #include "macros.h"
 
@@ -35,11 +37,17 @@
 //
 // All are active low
 
-void disp_time(uint8_t show) {
+volatile static enabled_t disp_enable = DISABLE;
+
+/**************************************************
+ * Public Functions
+ **************************************************/
+
+void disp_time(uint8_t pwm_state) {
 	uint8_t hours_leds = 0;
 	uint8_t mins_leds = 0;
 
-	if (show == ENABLE) {
+	if ((disp_enable == ENABLE) && (pwm_state == ENABLE)) {
 		hours_leds = my_time.hours;
 		mins_leds = my_time.mins;
 	}
@@ -56,4 +64,14 @@ void disp_time(uint8_t show) {
 	         | ((0b00000111 & mins_leds ) << 5));
 	PORTB &=  ~((0b00111000 & mins_leds ) >> 3);
 
+	return;
+}
+
+void disp_off() {
+	disp_enable = DISABLE;
+	return;
+}
+void disp_on() {
+	disp_enable = ENABLE;
+	return;
 }

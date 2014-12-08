@@ -18,7 +18,7 @@ DEVICE     = atmega168pa
 PRG_DEVICE = m168p
 CLOCK      = 1000000
 PROGRAMMER = -c avrispmkII
-OBJECTS    = main.o init.o disp_time.o
+OBJECTS    = main.o init.o disp_time.o debouncer.o
 FUSES      = -U lfuse:w:0x62:m -U hfuse:w:0xdf:m -U efuse:w:0xf9:m
 
 # http://www.engbedded.com/fusecalc/
@@ -26,7 +26,7 @@ FUSES      = -U lfuse:w:0x62:m -U hfuse:w:0xdf:m -U efuse:w:0xf9:m
 # Tune the lines below only if you know what you are doing:
 
 AVRDUDE = avrdude $(PROGRAMMER) -p $(PRG_DEVICE)
-COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
+COMPILE = avr-gcc -Wall -Os -fshort-enums -std=c99 -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
 
 # symbolic targets:
 all:	clean main.hex
