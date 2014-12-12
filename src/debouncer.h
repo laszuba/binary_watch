@@ -5,7 +5,8 @@
  * Macros
  **************************************************/
 
-#define _DEBOUNCE_TICKS 50
+#define _DEBOUNCE_TICKS 20
+#define _BUTTON_MODE_TICKS 300
 
 /**************************************************
  * Enums/Struts
@@ -19,13 +20,15 @@ typedef enum {
 
 typedef enum {
 	RUNNING,
-	DEBOUNCED
+	DEBOUNCED,
+	LONG_PRESSED,
+	CLEAR
 } debounced_t;
 
 /**************************************************
  * Public Functions
  **************************************************/
 
-debounced_t debouncer(debouncer_action_t);
+debounced_t debouncer(debouncer_action_t, volatile uint16_t *);
 
 #endif /* _DEBOUNCER_H */

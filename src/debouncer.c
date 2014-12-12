@@ -24,26 +24,31 @@
  * Public Functions
  **************************************************/
 
-debounced_t debouncer(debouncer_action_t action) {
-	volatile static uint16_t timer;
+debounced_t debouncer(debouncer_action_t action, volatile uint16_t * timer) {
+	volatile uint16_t _timer = *timer;
 	debounced_t debounced = RUNNING;
 
-	if (timer >= _DEBOUNCE_TICKS) {
+	if ((_timer >= _DEBOUNCE_TICKS) && (_timer < _BUTTON_MODE_TICKS)) {
 		debounced = DEBOUNCED;
+	}
+	else if (_timer >= _BUTTON_MODE_TICKS) {
+		debounced = LONG_PRESSED;
 	}
 
 	switch (action) {
 		case TST:
 			break;
 		case INC:
-			if (debounced == RUNNING) {
-				++timer;
+			if (debounced != LONG_PRESSED) {
+				++_timer;
 			}
 			break;
 		case RST:
-			timer = 0;
+			_timer = 0;
 			break;
 	}
+
+	*timer = _timer;
 
 	return debounced;
 }
