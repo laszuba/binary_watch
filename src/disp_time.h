@@ -15,6 +15,8 @@
 
 void disp_time(uint8_t);
 
+void mins_off(void);
+void hours_off(void);
 void disp_off(void);
 void disp_on(void);
 

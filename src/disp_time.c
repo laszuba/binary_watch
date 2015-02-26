@@ -37,7 +37,8 @@
 //
 // All are active low
 
-volatile static enabled_t disp_enable = DISABLE;
+volatile static enabled_t disp_mins_enable = DISABLE;
+volatile static enabled_t disp_hours_enable = DISABLE;
 
 /**************************************************
  * Public Functions
@@ -47,9 +48,9 @@ void disp_time(uint8_t pwm_state) {
 	uint8_t hours_leds = 0;
 	uint8_t mins_leds = 0;
 
-	if ((disp_enable == ENABLE) && (pwm_state == ENABLE)) {
-		hours_leds = my_time.hours;
-		mins_leds = my_time.mins;
+	if (pwm_state == ENABLE) {
+		if (disp_mins_enable == ENABLE) mins_leds = my_time.mins;
+		if (disp_hours_enable == ENABLE) hours_leds = my_time.hours;
 	}
 
 	// Make sure all the LEDs are off
@@ -67,11 +68,23 @@ void disp_time(uint8_t pwm_state) {
 	return;
 }
 
-void disp_off() {
-	disp_enable = DISABLE;
+void mins_off() {
+	disp_mins_enable = DISABLE;
 	return;
 }
+
+void hours_off() {
+	disp_hours_enable = DISABLE;
+	return;
+}
+
+void disp_off() {
+	disp_hours_enable = DISABLE;
+	disp_mins_enable = DISABLE;
+}
+
 void disp_on() {
-	disp_enable = ENABLE;
+	disp_hours_enable = ENABLE;
+	disp_mins_enable = ENABLE;
 	return;
 }
