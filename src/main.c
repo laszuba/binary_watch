@@ -61,13 +61,10 @@ void state_machine() {
 		// LEDs off, waiting for button presses
 		case SLEEPING:
 			next_state = SLEEPING;
-			disp_off();
 			disp_time(DISABLE);
-			disable_pwm();
-			enable_pcint();
 
 			//TODO: Go back to sleep
-			//sleep_proc();
+			sleep_proc();
 			break;
 
 		case IDLE:
@@ -84,9 +81,8 @@ void state_machine() {
 		// LEDs on, waiting for timeout
 		case WAKE:
 			next_state = WAKE;
-			disable_pcint();
-			disp_on();
 			enable_pwm();
+			disp_on();
 
 			if (!SET && !MODE) {
 				next_state = IDLE;
@@ -137,7 +133,7 @@ void state_machine() {
 			next_state = QUICK_HOURS_INC;
 
 			flash_mins();
-			
+
 			if (!SET) next_state = SET_HOURS;
 
 			if (quick_inc) {
@@ -243,14 +239,19 @@ void flash_hours() {
 // IMPORTANT: if interrupts are not enabled, the processor will never wake
 // from sleep
 void sleep_proc() {
-	set_sleep_mode(SLEEP_MODE_IDLE);
+	enable_pcint();
+	// Turn off timer0
+	disable_pwm();
+	disp_off();
 
-	sleep_enable();
-	sleep_mode();
- 
+	// probably want power save mode
+	// everything off but Timer2 interrupts
+	set_sleep_mode(SLEEP_MODE_PWR_SAVE);
+
+	sleep_mode(); 
 	// Continue here on wake
-	sleep_disable();
 
+	disable_pcint();
 	return;
 }
 
@@ -290,7 +291,7 @@ ISR(TIMER0_COMPA_vect) {
 ISR(TIMER0_OVF_vect) {
 	// On overflow, turn the LEDs back on
 	//TODO: remove after debugging
-	my_time.hours = current_state;
+	//my_time.hours = current_state;
 	disp_time(ENABLE);
 
 	if (current_state == IDLE) ++timeout_ticks;
@@ -314,26 +315,25 @@ ISR(TIMER0_OVF_vect) {
 ISR(TIMER2_OVF_vect) {
 	// On a timer overflow, update all the time values
 	// a 'tick' happens every timer compare or 128x a second
-	++my_time.ticks;
+	//++my_time.ticks;
 
-	if (my_time.ticks >= _TICKS_SEC) {
-		my_time.ticks = 0;
-		++my_time.secs;
+	//if (my_time.ticks >= _TICKS_SEC) {
+		//my_time.ticks = 0;
+	++my_time.secs;
 
-		if (my_time.secs >= 59) {
-			my_time.secs = 0;
-			++my_time.mins;
+	if (my_time.secs >= 59) {
+		my_time.secs = 0;
+		++my_time.mins;
 
-			if (my_time.mins >= 59) {
-				my_time.mins = 0;
-				++my_time.hours;
+		if (my_time.mins >= 59) {
+			my_time.mins = 0;
+			++my_time.hours;
 
-				if (my_time.hours >= 23) {
-					my_time.hours = 0;
-				}
+			if (my_time.hours >= 23) {
+				my_time.hours = 0;
 			}
-		}		
-	}
+		}
+	}		
 
 }
 

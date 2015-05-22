@@ -1927,4 +1927,8 @@ F 5 "NCP1117STAT3GOSCT-ND" H 4250 4250 60  0001 C CNN "Vendor P/N"
 	1    4250 4250
 	1    0    0    -1  
 $EndComp
+Text Notes 6600 6500 0    60   ~ 0
+I_MCU = V / 500
+Text Notes 3100 6550 0    60   ~ 0
+I_LEDS = V / 20
 $EndSCHEMATC

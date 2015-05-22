@@ -46,7 +46,7 @@ void init() {
 	ACSR |= (1 << ACD);
 
 	// Disable the ADC
-
+	//TODO
 	// Shut off unused peripherals
 	// ADC must be disabled before turning off clock
 	PRR |= (1 << PRTWI) | (0 << PRTIM2) | (0 << PRTIM0) |
@@ -73,8 +73,11 @@ void timer_init() {
 	// Interrupt on compare A and overflow
 	TIMSK0 |= (0 << OCIE0B) | (1 << OCIE0A) | (1 << TOIE0);
 
-	// Set timer 2 prescaler to /1
-	TCCR2B |= (0 << CS22) | (0 << CS21) | (1 << CS20);
+	// Set timer 2 prescaler to /1 (128 Hz)
+	//TCCR2B |= (0 << CS22) | (0 << CS21) | (1 << CS20);
+
+	// Set timer 2 prescaler to /128 (1 Hz)
+	TCCR2B |= (1 << CS22) | (0 << CS21) | (1 << CS20);
 
 	// Interrupt on overflow
 	TIMSK2 |= (0 << OCIE2B) | (0 << OCIE2A) | (1 << TOIE2);
